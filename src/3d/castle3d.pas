@@ -2736,6 +2736,12 @@ end;
 function CompareZ(A, B: Pointer): Integer;
 var
   BoxA, BoxB: TBox3D;
+
+  function _Sign(const A: single): integer;
+  begin
+    Result := Sign(A);
+  end;
+
 begin
   BoxA := T3D(A).BoundingBox;
   BoxB := T3D(B).BoundingBox;
@@ -2745,7 +2751,7 @@ begin
     Result := -1 else
   if BoxB.IsEmpty then
     Result := 1 else
-    Result := Sign(
+    Result := _Sign(
       (BoxA.Data[0][2] + BoxA.Data[0][2]) -
       (BoxB.Data[0][2] + BoxB.Data[0][2]));
 end;
