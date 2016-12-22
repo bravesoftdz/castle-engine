@@ -36,7 +36,7 @@
     <License Value="GNU GPL >= 2
 (or LGPL >= 2, if compiled with CASTLE_ENGINE_LGPL)"/>
     <Version Major="5" Minor="2"/>
-    <Files Count="357">
+    <Files Count="354">
       <Item1>
         <Filename Value="../src/3d/castle3d.pas"/>
         <UnitName Value="Castle3D"/>
@@ -1461,18 +1461,6 @@
         <Filename Value="../src/ui/castletiledmap.pas"/>
         <UnitName Value="CastleTiledMap"/>
       </Item354>
-      <Item355>
-        <Filename Value="../src/base/opengl/gl.pp"/>
-        <UnitName Value="GL"/>
-      </Item355>
-      <Item356>
-        <Filename Value="../src/base/opengl/glext.pp"/>
-        <UnitName Value="GLext"/>
-      </Item356>
-      <Item357>
-        <Filename Value="../src/base/opengl/glu.pp"/>
-        <UnitName Value="glu"/>
-      </Item357>
     </Files>
     <RequiredPkgs Count="1">
       <Item1>
