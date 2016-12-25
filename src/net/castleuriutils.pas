@@ -633,7 +633,8 @@ function URIMimeType(const URI: string; out Gzipped: boolean): string;
     if Ext = '.geo' then Result := 'application/x-geo' else
     if Ext = '.kanim' then Result := 'application/x-castle-anim-frames' else
     if Ext = '.castle-anim-frames' then Result := 'application/x-castle-anim-frames' else
-    if Ext = '.json' then Result := 'application/json' else
+    if Ext = '.json' then Result := 'application/json' else        
+    if Ext = '.scml' then Result := 'application/x-scml' else
     // Images.
     { Only images that we cannot handle in CastleImages unit are listed below.
       For handled images, their extensions are mime types are recorded

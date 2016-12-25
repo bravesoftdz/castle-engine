@@ -101,7 +101,8 @@ const
   'Quake 3 engine models (*.md3)|*.md3|' +
   'Wavefront (*.obj)|*.obj|' +
   'Videoscape (*.geo)|*.geo|' +
-  'Spine animation (*.json)|*.json';
+  'Spine animation (*.json)|*.json|' +
+  'Spriter animation (*.scml)|*.scml';
 
 { Load various model formats as animation expressed by VRML/X3D sequence.
 
@@ -147,7 +148,7 @@ implementation
 
 uses CastleClassUtils, CastleURIUtils,
   X3DLoadInternalGEO, X3DLoadInternal3DS, X3DLoadInternalOBJ,
-  X3DLoadInternalCollada, X3DLoadInternalSpine,
+  X3DLoadInternalCollada, X3DLoadInternalSpine, X3DLoadInternalSpriter,
   CastleInternalNodeInterpolator;
 
 function Load3D(const URL: string;
@@ -211,6 +212,9 @@ begin
          (and stripped). }
        (URIMimeType(URIDeleteAnchor(URL, true), Gzipped) = 'application/json') then
       Result := LoadSpine(URL) else
+
+    if MimeType = 'application/x-scml' then
+      Result := LoadSpriter(URL) else
 
     if MimeType = 'application/x-castle-anim-frames' then
       Result := LoadAnimFrames(URL) else
