@@ -55,8 +55,8 @@ var
   C: TDOMNode;
   MapInst: TMapInstruction;
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);  
-  FName := ANode.Attributes.GetNamedItem('name').NodeValue;
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
+  FName := ReadString(ANode.Attributes.GetNamedItem('name'));
   C := ANode.FirstChild;
   while C <> nil do
   begin
@@ -74,8 +74,8 @@ end;
 
 procedure TMapInstruction.Parse(const ANode: TDOMNode);
 begin
-  FFolder := StrToInt(ANode.Attributes.GetNamedItem('folder').NodeValue);    
-  FFile := StrToInt(ANode.Attributes.GetNamedItem('file').NodeValue);    
+  FFolder := ReadInteger(ANode.Attributes.GetNamedItem('folder'));
+  FFile := ReadInteger(ANode.Attributes.GetNamedItem('file'));
   FTarFolder := ReadInteger(ANode.Attributes.GetNamedItem('target_folder'), -1);
   FTarFile := ReadInteger(ANode.Attributes.GetNamedItem('target_file'), -1);
 end;

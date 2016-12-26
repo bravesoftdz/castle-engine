@@ -48,8 +48,8 @@ var
   CharacterMap: TCharacterMap;
   Animation: TAnimation;
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);  
-  FName := ANode.Attributes.GetNamedItem('name').NodeValue;
+  FId := ReadInteger((ANode.Attributes.GetNamedItem('id')));
+  FName := ReadString(ANode.Attributes.GetNamedItem('name'));
   C := ANode.FirstChild;
   while C <> nil do
   begin

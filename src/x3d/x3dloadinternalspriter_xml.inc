@@ -17,7 +17,7 @@
 {$endif}
 
 {$ifdef read_implementation}
-function ReadInteger(const ANode: TDOMNode; const ADef: integer): integer;
+function ReadInteger(const ANode: TDOMNode; const ADef: integer = 0): integer;
 begin
   if ANode <> nil then
     Result := StrToInt(ANode.NodeValue)
@@ -25,7 +25,7 @@ begin
     Result := ADef;
 end;                         
 
-function ReadFloat(const ANode: TDOMNode; const ADef: single): single;
+function ReadFloat(const ANode: TDOMNode; const ADef: single= 0): single;
 begin
   if ANode <> nil then
     Result := StrToFloat(ANode.NodeValue)
@@ -33,7 +33,7 @@ begin
     Result := ADef;
 end;
 
-function ReadBool(const ANode: TDOMNode; const ADef: boolean): boolean;
+function ReadBool(const ANode: TDOMNode; const ADef: boolean = false): boolean;
 begin
   if ANode <> nil then
     Result := StrToBool(ANode.NodeValue)
@@ -41,7 +41,7 @@ begin
     Result := ADef;
 end;
 
-function ReadString(const ANode: TDOMNode; const ADef: string): string;
+function ReadString(const ANode: TDOMNode; const ADef: string = ''): string;
 begin
   if ANode <> nil then
     Result := ANode.NodeValue

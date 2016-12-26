@@ -56,8 +56,8 @@ var
   C: TDOMNode;
   File_: TFile;
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);  
-  FName := ANode.Attributes.GetNamedItem('name').NodeValue;
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
+  FName := ReadString(ANode.Attributes.GetNamedItem('name'));
   C := ANode.FirstChild;
   while C <> nil do
   begin
@@ -75,10 +75,10 @@ end;
 
 procedure TFile.Parse(const ANode: TDOMNode);
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);
-  FName := ANode.Attributes.GetNamedItem('name').NodeValue;   
-  FWidth := StrToFloat(ANode.Attributes.GetNamedItem('width').NodeValue);
-  FHeight := StrToFloat(ANode.Attributes.GetNamedItem('height').NodeValue); 
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
+  FName := ReadString(ANode.Attributes.GetNamedItem('name'));
+  FWidth := ReadFloat(ANode.Attributes.GetNamedItem('width'));
+  FHeight := ReadFloat(ANode.Attributes.GetNamedItem('height'));
   FPivotX := ReadFloat(ANode.Attributes.GetNamedItem('pivot_x'), 0);      
   FPivotY := ReadFloat(ANode.Attributes.GetNamedItem('pivot_y'), 1);
 end;

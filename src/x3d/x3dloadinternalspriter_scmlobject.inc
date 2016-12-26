@@ -49,10 +49,10 @@ var
   Folder: TFolder;
   Entity: TEntity;
 begin
-  FScmlVersion := ANode.Attributes.GetNamedItem('scml_version').NodeValue;  
-  FGenerator := ANode.Attributes.GetNamedItem('generator').NodeValue;
-  FGeneratorVersion := ANode.Attributes.GetNamedItem('generator_version')
-      .NodeValue;
+  FScmlVersion := ReadString(ANode.Attributes.GetNamedItem('scml_version'));
+  FGenerator := ReadString(ANode.Attributes.GetNamedItem('generator'));
+  FGeneratorVersion :=
+      ReadString(ANode.Attributes.GetNamedItem('generator_version'));
   C := ANode.FirstChild;
   while C <> nil do
   begin

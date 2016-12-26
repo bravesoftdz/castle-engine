@@ -58,7 +58,7 @@ var
   C: TDOMNode;
   Ref: TRef;
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
   FTime := ReadInteger(ANode.Attributes.GetNamedItem('time'), 0) * 0.001;
   C := ANode.FirstChild;
   while C <> nil do
@@ -82,15 +82,11 @@ begin
 end;
 
 procedure TRef.Parse(const ANode: TDOMNode);
-var
-  N: TDOMNode;
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);   
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
   FParent := ReadInteger(ANode.Attributes.GetNamedItem('parent'), -1);
-  FTimeline := StrToInt(ANode.Attributes.GetNamedItem('timeline').NodeValue);
-  FKey := StrToInt(ANode.Attributes.GetNamedItem('key').NodeValue);
-  N := ANode.Attributes.GetNamedItem('z_index');
-  if N <> nil then
-    FZIndex := StrToInt(N.NodeValue);
+  FTimeline := ReadInteger(ANode.Attributes.GetNamedItem('timeline'));
+  FKey := ReadInteger(ANode.Attributes.GetNamedItem('key'));
+  FZIndex := ReadInteger(ANode.Attributes.GetNamedItem('z_index'));
 end;
 {$endif}

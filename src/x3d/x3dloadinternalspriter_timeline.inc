@@ -75,10 +75,10 @@
 {$ifdef read_implementation}
 procedure TTimelineKey.Parse(const ANode: TDOMNode);
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);
-  FTime := StrToInt(ANode.Attributes.GetNamedItem('time').NodeValue);
-  FC1 := StrToFloat(ANode.Attributes.GetNamedItem('c1').NodeValue);
-  FC2 := StrToFloat(ANode.Attributes.GetNamedItem('c2').NodeValue);
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
+  FTime := ReadInteger(ANode.Attributes.GetNamedItem('time'));
+  FC1 := ReadFloat(ANode.Attributes.GetNamedItem('c1'));
+  FC2 := ReadFloat(ANode.Attributes.GetNamedItem('c2'));
   case ReadString(ANode.Attributes.GetNamedItem('curve_type'), 'linear') of
     'instant': FCurveType := ctInstant;
     'quadratic': FCurveType := ctQuadratic;
@@ -107,8 +107,8 @@ begin
   C := ANode.FindNode('bone');
   if C <> nil then
   begin
-    FLength := StrToInt(C.Attributes.GetNamedItem('length').NodeValue);
-    FWidth := StrToInt(C.Attributes.GetNamedItem('width').NodeValue);
+    FLength := ReadInteger(C.Attributes.GetNamedItem('length'));
+    FWidth := ReadInteger(C.Attributes.GetNamedItem('width'));
   end;
 end;
 
@@ -120,8 +120,8 @@ begin
   C := ANode.FindNode('object');
   if C <> nil then
   begin
-    FFile := StrToInt(C.Attributes.GetNamedItem('file').NodeValue);
-    FFolder := StrToInt(C.Attributes.GetNamedItem('folder').NodeValue);
+    FFile := ReadInteger(C.Attributes.GetNamedItem('file'));
+    FFolder := ReadInteger(C.Attributes.GetNamedItem('folder'));
     PivotXAttr := C.Attributes.GetNamedItem('pivot_x');              
     PivotYAttr := C.Attributes.GetNamedItem('pivot_y');
     if (PivotXAttr = nil) and (PivotYAttr = nil) then
@@ -157,8 +157,8 @@ var
   C: TDOMNode;
   i: integer;
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);
-  FName := ANode.Attributes.GetNamedItem('name').NodeValue;
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
+  FName := ReadString(ANode.Attributes.GetNamedItem('name'));
   case ANode.Attributes.GetNamedItem('type').NodeValue of
     'sprite':
       begin

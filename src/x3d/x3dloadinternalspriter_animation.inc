@@ -50,12 +50,11 @@ var
   Timeline: TTimeLine;
   C: TDOMNode;
 begin
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);  
-  FName := ANode.Attributes.GetNamedItem('name').NodeValue;
-  FLength := StrToFloat(ANode.Attributes.GetNamedItem('length').NodeValue)
-      * 0.001;
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
+  FName := ReadString(ANode.Attributes.GetNamedItem('name'));
+  FLength := ReadFloat(ANode.Attributes.GetNamedItem('length')) * 0.001;
   FLooping := ReadBool(ANode.Attributes.GetNamedItem('looping'), true);
-  FId := StrToInt(ANode.Attributes.GetNamedItem('id').NodeValue);
+  FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
   C := ANode.FindNode('mainline').FirstChild;
   while C <> nil do
   begin
