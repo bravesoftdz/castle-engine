@@ -21,7 +21,7 @@
     FLength: single;
     FLooping: boolean;
     FMainlineKeys,
-    FTimelines: TObjectList;
+    FTimelines: TFPObjectList;
   public     
     constructor Create;
     destructor Destroy; override;
@@ -33,8 +33,8 @@
 constructor TAnimation.Create;
 begin
   inherited;
-  FMainlineKeys := TObjectList.Create;
-  FTimelines := TObjectList.Create;
+  FMainlineKeys := TFPObjectList.Create;
+  FTimelines := TFPObjectList.Create;
 end;
 
 destructor TAnimation.Destroy;

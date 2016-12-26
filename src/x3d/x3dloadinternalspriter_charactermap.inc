@@ -18,7 +18,7 @@
   protected
     FId: integer;
     FName: string;
-    FMaps: TObjectList;
+    FMaps: TFPObjectList;
   public     
     constructor Create;
     destructor Destroy; override;
@@ -41,7 +41,7 @@
 constructor TCharacterMap.Create;
 begin
   inherited;
-  FMaps := TObjectList.Create;
+  FMaps := TFPObjectList.Create;
 end;
 
 destructor TCharacterMap.Destroy;

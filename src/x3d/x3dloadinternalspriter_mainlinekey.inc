@@ -19,7 +19,7 @@
     FId: integer;
     FTime: single;
     FBoneRefs,
-    FObjectRefs: TObjectList;
+    FObjectRefs: TFPObjectList;
   public
     constructor Create;
     destructor Destroy; override;
@@ -42,8 +42,8 @@
 constructor TMainlineKey.Create;
 begin
   inherited;
-  FBoneRefs := TObjectList.Create;
-  FObjectRefs := TObjectList.Create;
+  FBoneRefs := TFPObjectList.Create;
+  FObjectRefs := TFPObjectList.Create;
 end;
 
 destructor TMainlineKey.Destroy;

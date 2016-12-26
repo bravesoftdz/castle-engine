@@ -64,7 +64,7 @@
     FId: integer;
     FName: string;
     FObjectType: TObjectType;
-    FKeys: TObjectList;
+    FKeys: TFPObjectList;
   public
     constructor Create;
     destructor Destroy; override;
@@ -142,7 +142,7 @@ end;
 constructor TTimeline.Create;
 begin
   inherited;
-  FKeys := TObjectList.Create;
+  FKeys := TFPObjectList.Create;
 end;
 
 destructor TTimeline.Destroy;

@@ -19,7 +19,7 @@
     FId: integer;
     FName: string;
     FCharacterMaps,
-    FAnimations: TObjectList;
+    FAnimations: TFPObjectList;
   public     
     constructor Create;
     destructor Destroy; override;
@@ -31,8 +31,8 @@
 constructor TEntity.Create;
 begin
   inherited;
-  FCharacterMaps := TObjectList.Create;   
-  FAnimations := TObjectList.Create;
+  FCharacterMaps := TFPObjectList.Create;   
+  FAnimations := TFPObjectList.Create;
 end;
 
 destructor TEntity.Destroy;

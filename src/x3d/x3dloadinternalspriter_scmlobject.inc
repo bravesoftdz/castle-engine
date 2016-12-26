@@ -20,7 +20,7 @@
     FGenerator,
     FGeneratorVersion: string;
     FFolders,
-    FEntities: TObjectList;
+    FEntities: TFPObjectList;
   public
     constructor Create;
     destructor Destroy; override;
@@ -32,8 +32,8 @@
 constructor TScmlObject.Create;
 begin
   inherited;
-  FFolders := TObjectList.Create;
-  FEntities := TObjectList.Create;
+  FFolders := TFPObjectList.Create;
+  FEntities := TFPObjectList.Create;
 end;
 
 destructor TScmlObject.Destroy;

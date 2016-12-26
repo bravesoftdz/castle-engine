@@ -18,7 +18,7 @@
   protected
     FId: integer;
     FName: string;
-    FFiles: TObjectList;
+    FFiles: TFPObjectList;
   public     
     constructor Create;
     destructor Destroy; override;
@@ -42,7 +42,7 @@
 constructor TFolder.Create;
 begin
   inherited;
-  FFiles := TObjectList.Create;
+  FFiles := TFPObjectList.Create;
 end;
 
 destructor TFolder.Destroy;
