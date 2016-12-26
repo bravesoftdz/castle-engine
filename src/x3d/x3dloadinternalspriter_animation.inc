@@ -65,6 +65,13 @@ begin
           MainlineKey.Parse(C);
           FMainlineKeys.Add(MainlineKey);
         end;
+    end;
+    C := C.NextSibling;
+  end;
+  C := ANode.FirstChild;
+  while C <> nil do
+  begin
+    case C.NodeName of
       'timeline':
         begin
           Timeline := TTimeLine.Create;

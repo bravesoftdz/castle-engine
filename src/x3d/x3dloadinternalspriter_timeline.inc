@@ -159,7 +159,7 @@ var
 begin
   FId := ReadInteger(ANode.Attributes.GetNamedItem('id'));
   FName := ReadString(ANode.Attributes.GetNamedItem('name'));
-  case ANode.Attributes.GetNamedItem('type').NodeValue of
+  case ReadString(ANode.Attributes.GetNamedItem('type'), 'sprite') of
     'sprite':
       begin
         FObjectType := otSprite;
