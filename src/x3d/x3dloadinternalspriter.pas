@@ -26,7 +26,7 @@ function LoadSpriter(URL: string): TX3DRootNode;
 
 implementation
 
-uses SysUtils, Classes, FGL, FpJson, JSONParser, JSONScanner, Math,
+uses SysUtils, Classes, Contnrs, DOM, XMLRead, Math,
   CastleVectors, CastleUtils, CastleLog, CastleURIUtils, CastleDownload,
   CastleStringUtils, CastleClassUtils, CastleColors,
   X3DLoadInternalUtils, X3DFields, CastleGenericLists;
@@ -36,12 +36,30 @@ type
 
 { XML skeleton -------------------------------------------------------------- }
 
+type
   { forward declarations }
+  { For scml file format/pseudo code, please refer to
+    http://www.brashmonkey.com/ScmlDocs/ScmlReference.html }
 
   {$define read_interface}
+  {$I x3dloadinternalspriter_scmlobject.inc}
+  {$I x3dloadinternalspriter_filefolder.inc}
+  {$I x3dloadinternalspriter_entity.inc}
+  {$I x3dloadinternalspriter_charactermap.inc}
+  {$I x3dloadinternalspriter_animation.inc}
+  {$I x3dloadinternalspriter_mainlinekey.inc}
+  {$I x3dloadinternalspriter_timeline.inc}
   {$undef read_interface}
 
-  {$define read_implementation}
+  {$define read_implementation}           
+  {$I x3dloadinternalspriter_xml.inc}
+  {$I x3dloadinternalspriter_scmlobject.inc} 
+  {$I x3dloadinternalspriter_filefolder.inc}
+  {$I x3dloadinternalspriter_entity.inc}
+  {$I x3dloadinternalspriter_charactermap.inc}
+  {$I x3dloadinternalspriter_animation.inc}
+  {$I x3dloadinternalspriter_mainlinekey.inc}
+  {$I x3dloadinternalspriter_timeline.inc}
   {$undef read_implementation}
 
 { Main loading function ------------------------------------------------------ }
@@ -49,10 +67,28 @@ type
 function LoadSpriter(URL: string): TX3DRootNode;
 var
   S: TStream;
+  Doc: TXMLDocument;
+  ScmlObject: TScmlObject;
 begin
   S := Download(URL);
   try
-
+    ReadXMLFile(Doc, S);
+    try
+      Result := TX3DRootNode.Create('', URL);
+      try
+        ScmlObject := TScmlObject.Create;
+        try
+          ScmlObject.Parse(Doc.FindNode('spriter_data'));
+        finally
+          FreeAndNil(ScmlObject);
+        end;
+      except
+        FreeAndNil(Result);
+        raise;
+      end;
+    finally
+      FreeAndNil(Doc);
+    end;
   finally
     FreeAndNil(S);
   end;

@@ -36,7 +36,7 @@
     <License Value="GNU GPL >= 2
 (or LGPL >= 2, if compiled with CASTLE_ENGINE_LGPL)"/>
     <Version Major="5" Minor="2"/>
-    <Files Count="354">
+    <Files Count="361">
       <Item1>
         <Filename Value="../src/3d/castle3d.pas"/>
         <UnitName Value="Castle3D"/>
@@ -1461,6 +1461,34 @@
         <Filename Value="../src/x3d/x3dloadinternalspriter.pas"/>
         <UnitName Value="X3DLoadInternalSpriter"/>
       </Item354>
+      <Item355>
+        <Filename Value="../src/x3d/x3dloadinternalspriter_scmlobject.inc"/>
+        <Type Value="Include"/>
+      </Item355>
+      <Item356>
+        <Filename Value="../src/x3d/x3dloadinternalspriter_timeline.inc"/>
+        <Type Value="Include"/>
+      </Item356>
+      <Item357>
+        <Filename Value="../src/x3d/x3dloadinternalspriter_mainlinekey.inc"/>
+        <Type Value="Include"/>
+      </Item357>
+      <Item358>
+        <Filename Value="../src/x3d/x3dloadinternalspriter_animation.inc"/>
+        <Type Value="Include"/>
+      </Item358>
+      <Item359>
+        <Filename Value="../src/x3d/x3dloadinternalspriter_charactermap.inc"/>
+        <Type Value="Include"/>
+      </Item359>
+      <Item360>
+        <Filename Value="../src/x3d/x3dloadinternalspriter_entity.inc"/>
+        <Type Value="Include"/>
+      </Item360>
+      <Item361>
+        <Filename Value="../src/x3d/x3dloadinternalspriter_filefolder.inc"/>
+        <Type Value="Include"/>
+      </Item361>
     </Files>
     <RequiredPkgs Count="1">
       <Item1>
