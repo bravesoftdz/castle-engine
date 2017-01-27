@@ -24,8 +24,8 @@ interface
 uses SysUtils, Classes, FGL,
   CastleVectors, CastleBoxes, X3DNodes, CastleClassUtils,
   CastleUtils, CastleSceneCore, CastleRenderer, CastleGL, CastleBackground,
-  CastleGLUtils, CastleShapeOctree, CastleGLShadowVolumes, X3DFields, CastleTriangles,
-  CastleShapes, CastleFrustum, Castle3D, CastleGLShaders,
+  CastleGLUtils, CastleInternalShapeOctree, CastleGLShadowVolumes, X3DFields,
+  CastleTriangles, CastleShapes, CastleFrustum, Castle3D, CastleGLShaders,
   CastleGenericLists, CastleRectangles, CastleCameras, CastleRendererInternalShader,
   CastleSceneInternalShape, CastleSceneInternalOcclusion, CastleSceneInternalBlending;
 
@@ -101,8 +101,6 @@ type
 
   TRenderingAttributesEvent = procedure (Attributes: TSceneRenderingAttributes) of object;
 
-  TBlendingSort = (bsNone, bs2D, bs3D);
-
   TSceneRenderingAttributes = class(TRenderingAttributes)
   private
     { Scenes that use Renderer with this TSceneRenderingAttributes instance. }
@@ -147,7 +145,7 @@ type
         For closed convex 3D objects, using backface culling
         (solid = TRUE for geometry) helps. For multiple transparent shapes,
         sorting the transparent shapes helps,
-        see TSceneRenderingAttributes.BlendingSort.
+        see @link(TSceneRenderingAttributes.BlendingSort).
         Sometimes, no solution works for all camera angles.
 
         Another disadvantage of bdOneMinusSrcAlpha may be that
@@ -161,8 +159,8 @@ type
         often making too bright results. }
       DefaultBlendingDestinationFactor = bdOneMinusSrcAlpha;
 
-      { }
-      DefaultBlendingSort = bsNone;
+      { Default value of @link(TSceneRenderingAttributes.BlendingSort). }
+      DefaultBlendingSort = bs3D;
 
       DefaultWireframeColor: TVector3Single = (0, 0, 0);
 
@@ -192,15 +190,9 @@ type
       read FBlending write SetBlending default true;
 
     { Blending function parameters, used when @link(Blending).
-
       Note that this is only a default, VRML/X3D model can override this
       for specific shapes by using our extension BlendMode node.
       See [http://castle-engine.sourceforge.net/x3d_extensions.php#section_ext_blending].
-
-      Note that BlendingSort may be overridden in a specific 3D models
-      by using NavigationInfo node with blendingSort field,
-      see TNavigationInfoNode.BlendingSort.
-
       @groupBegin }
     property BlendingSourceFactor: TBlendingSourceFactor
       read FBlendingSourceFactor write SetBlendingSourceFactor
@@ -208,10 +200,17 @@ type
     property BlendingDestinationFactor: TBlendingDestinationFactor
       read FBlendingDestinationFactor write SetBlendingDestinationFactor
       default DefaultBlendingDestinationFactor;
+    { @groupEnd }
+
+    { How to sort the rendered objects using blending (partial transparency).
+      See the @link(TBlendingSort) documentation for possible values.
+
+      This may be overridden in a specific 3D models
+      by using NavigationInfo node with blendingSort field,
+      see TNavigationInfoNode.BlendingSort. }
     property BlendingSort: TBlendingSort
       read FBlendingSort write SetBlendingSort
       default DefaultBlendingSort;
-    { @groupEnd }
 
     { Setting this to @false disables any modification of OpenGL
       blending (and depth mask) state by TCastleScene.
@@ -813,6 +812,11 @@ var
     Our OpenGL resources are currently shared across all OpenGL contexts,
     and they all automatically share this cache. }
   GLContextCache: TGLRendererContextCache;
+
+const
+  bsNone = CastleBoxes.bsNone;
+  bs2D = CastleBoxes.bs2D;
+  bs3D = CastleBoxes.bs3D;
 
 implementation
 

@@ -26,7 +26,8 @@ interface
 uses
   SysUtils, Classes, CastleVectors, CastleBoxes, CastleTriangles,
   X3DFields, X3DNodes, CastleClassUtils, CastleUtils,
-  CastleShapes, CastleTriangleOctree, CastleProgress, CastleOctree, CastleShapeOctree,
+  CastleShapes, CastleInternalTriangleOctree, CastleProgress, CastleInternalOctree,
+  CastleInternalShapeOctree,
   CastleKeysMouse, X3DTime, CastleCameras, X3DTriangles, Contnrs,
   CastleRenderingCamera, Castle3D, X3DShadowMaps, FGL, CastleGenericLists,
   CastleRays;
@@ -1100,23 +1101,7 @@ type
       Changing RootNode allows you to load
       and unload whole new VRML/X3D graph (for example from some 3D file)
       whenever you want, and keep the same TCastleSceneCore instance
-      (with the same rendering settings and such).
-
-      Note that there is also a trick to conserve memory use.
-      After you've done PrepareResources some things are precalculated here,
-      and RootNode is actually not used, unless you use ProcessEvents.
-      So you can free RootNode
-      (and set it to nil here) @italic(without calling ChangedAll)
-      and some things will just continue to work, unaware of the fact
-      that the underlying RootNode structure is lost.
-      Note that this is still considered a "dirty trick", and you will
-      have to be extra-careful then about what methods/properties
-      from this class. Generally, use only things that you prepared
-      with PrepareResources. So e.g. calling Render or using BoundingBox.
-      If all your needs are that simple, then you can use this trick
-      to save some memory. This is actually useful when using TCastlePrecalculatedAnimation,
-      as it creates a lot of intermediate node structures and TCastleSceneCore
-      instances. }
+      (with the same rendering settings and such). }
     property RootNode: TX3DRootNode read FRootNode write FRootNode;
 
     { If @true, RootNode will be freed by destructor of this class. }
@@ -1152,8 +1137,7 @@ type
       Note that when VRML/X3D scene contains Collision nodes, this octree
       contains the @italic(collidable (not necessarily rendered)) objects.
 
-      TODO: Temporarily, this is updated simply by rebuilding.
-      This is a work in progress. }
+      TODO: Temporarily, this is updated simply by rebuilding. }
     function InternalOctreeDynamicCollisions: TShapeOctree;
 
     { A spatial structure containing all visible triangles, suitable only
@@ -4706,6 +4690,14 @@ begin
   except Result.Free; raise end;
 
   finally Dec(Dirty) end;
+
+  { $define CASTLE_DEBUG_OCTREE_DUPLICATION}
+  {$ifdef CASTLE_DEBUG_OCTREE_DUPLICATION}
+  WritelnLog('Triangles Octree Stats', '%d items in octree, %d items in octree''s leafs, duplication %f',
+    [Result.TotalItemsInOctree,
+     Result.TotalItemsInLeafs,
+     Result.TotalItemsInLeafs / Result.TotalItemsInOctree]);
+  {$endif}
 end;
 
 function TCastleSceneCore.CreateShapeOctree(
@@ -4749,6 +4741,13 @@ begin
   except Result.Free; raise end;
 
   finally Dec(Dirty) end;
+
+  {$ifdef CASTLE_DEBUG_OCTREE_DUPLICATION}
+  WritelnLog('Shapes Octree Stats', '%d items in octree, %d items in octree''s leafs, duplication %f',
+    [Result.TotalItemsInOctree,
+     Result.TotalItemsInLeafs,
+     Result.TotalItemsInLeafs / Result.TotalItemsInOctree]);
+  {$endif}
 end;
 
 { viewpoints ----------------------------------------------------------------- }
@@ -6662,7 +6661,7 @@ end;
 function TCastleSceneCore.GetViewpointName(Idx: integer): string;
 begin
   if Between(Idx, 0, FViewpointsArray.Count - 1) then
-    Result := FViewpointsArray[Idx].Description else
+    Result := FViewpointsArray[Idx].SmartDescription else
     Result := '';
 end;
 
