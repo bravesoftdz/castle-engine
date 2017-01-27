@@ -1464,15 +1464,7 @@
       <Item355>
         <Filename Value="../src/x3d/x3dtriangles.pas"/>
         <UnitName Value="X3DTriangles"/>
-<<<<<<< HEAD
-      </Item353>
-      <Item354>
-        <Filename Value="../src/ui/castletiledmap.pas"/>
-        <UnitName Value="CastleTiledMap"/>
-      </Item354>
-=======
       </Item355>
->>>>>>> 86849e04a8edd20c9ec257074131d9d9facd4f96
     </Files>
     <RequiredPkgs Count="1">
       <Item1>
