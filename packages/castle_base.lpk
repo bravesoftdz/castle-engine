@@ -36,7 +36,7 @@
     <License Value="GNU GPL >= 2
 (or LGPL >= 2, if compiled with CASTLE_ENGINE_LGPL)"/>
     <Version Major="5" Minor="2"/>
-    <Files Count="355">
+    <Files Count="356">
       <Item1>
         <Filename Value="../src/3d/castle3d.pas"/>
         <UnitName Value="Castle3D"/>
@@ -1465,6 +1465,11 @@
         <Filename Value="../src/x3d/x3dtriangles.pas"/>
         <UnitName Value="X3DTriangles"/>
       </Item355>
+      <Item356>
+        <Filename Value="../src/x3d/x3dloadinternaltiled.pas"/>
+        <AddToUsesPkgSection Value="False"/>
+        <UnitName Value="X3DLoadInternalSpine"/>
+      </Item356>
     </Files>
     <RequiredPkgs Count="1">
       <Item1>
