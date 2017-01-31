@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2016 Michalis Kamburelis.
+  Copyright 2003-2017 Michalis Kamburelis, Trung Le (kagamma).
 
   This file is part of "Castle Game Engine".
 
@@ -78,9 +78,16 @@ uses CastleVectors, SysUtils, X3DNodes, X3DLoadInternalMD3,
   @param(AllowStdIn If AllowStdIn and URL = '-' then it will load
     a VRML/X3D file from StdInStream (using current working directory
     as BaseUrl).) }
+
 function Load3D(const URL: string;
   AllowStdIn: boolean = false;
-  NilOnUnrecognizedFormat: boolean = false): TX3DRootNode;
+  NilOnUnrecognizedFormat: boolean = false): TX3DRootNode; overload;
+
+function Load3D(const URL: string;
+  var Loader: TObject;
+  RetainLoader: boolean = false;
+  AllowStdIn: boolean = false;
+  NilOnUnrecognizedFormat: boolean = false): TX3DRootNode; overload;
 
 const
   { File filters for files loaded by Load3D, suitable
@@ -153,6 +160,14 @@ uses CastleClassUtils, CastleURIUtils,
 
 function Load3D(const URL: string;
   AllowStdIn, NilOnUnrecognizedFormat: boolean): TX3DRootNode;
+var
+  Temp: TObject = nil;
+begin
+  Result := Load3D(URL, Temp, false, AllowStdIn, NilOnUnrecognizedFormat);
+end;
+
+function Load3D(const URL: string;
+  var Loader: TObject; RetainLoader, AllowStdIn, NilOnUnrecognizedFormat: boolean): TX3DRootNode;
 
   function LoadAnimFrames(const URL: string): TX3DRootNode;
   var
@@ -217,7 +232,7 @@ begin
       Result := LoadAnimFrames(URL) else    
 
     if MimeType = 'application/tiled' then
-      Result := LoadTiled(URL) else
+      Result := LoadTiled(URL, Loader) else
 
     if MimeType = 'application/x-md3' then
       Result := LoadMD3(URL) else
@@ -228,6 +243,8 @@ begin
         'Unrecognized file type "%s" for 3D model file "%s"',
         [MimeType, URIDisplay(URL)]);
   end;
+  if not RetainLoader then
+    FreeAndNil(Loader);
 end;
 
 procedure Load3DSequence(const URL: string;

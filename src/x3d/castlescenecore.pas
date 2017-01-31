@@ -1,5 +1,5 @@
 {
-  Copyright 2003-2016 Michalis Kamburelis.
+  Copyright 2003-2017 Michalis Kamburelis, Trung Le (kagamma).
 
   This file is part of "Castle Game Engine".
 
@@ -741,6 +741,10 @@ type
       Call it only when CameraViewKnown and ProcessEvents. }
     procedure UpdateCameraEvents;
   protected
+    { Tells the engine if we want to keep the loader after loading process. }
+    FRetainLoaderInstance: boolean;
+    { Field contains loader instance. }
+    FLoaderInstance: TObject;
     { List of TScreenEffectNode nodes, collected by ChangedAll. }
     ScreenEffectNodes: TX3DNodeList;
 
@@ -1943,6 +1947,9 @@ type
       ) }
     property AnimateSkipTicks: Cardinal read FAnimateSkipTicks write SetAnimateSkipTicks
       default 0;
+    property RetainLoaderInstance: boolean read FRetainLoaderInstance write FRetainLoaderInstance
+      default false;
+    property LoaderInstance: TObject read FLoaderInstance;
   end;
 
 var
@@ -2488,7 +2495,8 @@ begin
   { Note that if Load3D fails, we will not change the RootNode,
     so currently loaded scene will remain valid. }
 
-  Load(Load3D(AURL, AllowStdIn), true, AResetTime);
+  Load(Load3D(AURL, FLoaderInstance, FRetainLoaderInstance, AllowStdIn),
+      true, AResetTime);
 
   FURL := AURL;
 end;

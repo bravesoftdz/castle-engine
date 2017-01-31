@@ -22,14 +22,15 @@ interface
 
 uses X3DNodes, CastleTiledMap;
 
-function LoadTiled(URL: string): TX3DRootNode;
+function LoadTiled(URL: string; out ALoader: TObject): TX3DRootNode;
 
 implementation
 
 uses SysUtils, Classes, FGL, Math,
   CastleVectors, CastleUtils, CastleLog, CastleURIUtils, CastleDownload,
   CastleStringUtils, CastleClassUtils, CastleColors,
-  X3DLoadInternalUtils, X3DFields, CastleGenericLists;
+  X3DLoadInternalUtils, X3DFields, CastleGenericLists,
+  X3DLoad;
 
 const
   VERTEX_BUFFER = 4096;
@@ -87,7 +88,9 @@ type
     { Construct an orthogonal map from given tiled map. }
     procedure ConstructOrthogonalMap(const AParentNode: TAbstractGroupingNode);
     { Rebase object's Y-axis. }
-    procedure RebaseYAxis(const ALayer: PLayer);
+    procedure RebaseYAxis(const ALayer: PLayer);                               
+    { Load object contains "url" property. }
+    procedure LoadObjects(const ALayer: PLayer; const AZOrder: single);
   public
     constructor Create;
     destructor Destroy; override;
@@ -263,8 +266,10 @@ begin
     begin
       Layer_ := FTiledMap.Layers.Ptr(i);
       if Layer_^.LayerType = ltObjectGroup then
-      begin
+      begin                                   
         RebaseYAxis(Layer_);
+        LoadObjects(Layer_, ZDepth);
+        ZDepth += 0.1;
         continue;
       end;
       if Layer_^.LayerType = ltImageLayer then
@@ -324,16 +329,44 @@ end;
 
 procedure TInternalTiledMapLoader.RebaseYAxis(const ALayer: PLayer);
 var
-  i, Len: integer;
+  i: integer;
   TiledObj: TTiledObject;
 begin
-  Len := 0;
   if ALayer^.LayerType = ltObjectGroup then
     for i := 0 to ALayer^.Objects.Count-1 do
     begin
       TiledObj := ALayer^.Objects[i];
       TiledObj.Y :=
-          FTiledMap.Height * FTiledMap.TileHeight - ALayer^.Objects[i].Y;
+          FTiledMap.Height * FTiledMap.TileHeight - TiledObj.Y;
+      TiledObj.CenterY :=
+          FTiledMap.Height * FTiledMap.TileHeight - TiledObj.CenterY;
+    end;
+end;
+
+procedure TInternalTiledMapLoader.LoadObjects(const ALayer: PLayer;
+    const AZOrder: single);
+var
+  i, j: integer;
+  TiledObj: TTiledObject;
+  T: TTransformNode;
+begin
+  if ALayer^.LayerType = ltObjectGroup then
+    for i := 0 to ALayer^.Objects.Count-1 do
+    begin
+      TiledObj := ALayer^.Objects[i];
+      if TiledObj.Properties <> nil then
+        for j := 0 to TiledObj.Properties.Count-1 do
+        begin
+          if TiledObj.Properties[j].Name = 'url' then
+          begin
+            T := TTransformNode.Create(TiledObj.Name);
+            T.Translation := Vector3Single(
+                TiledObj.CenterX, TiledObj.CenterY, AZOrder);
+            T.FdChildren.Add(Load3D(TiledObj.Properties[j].Value));
+            FRoot.FdChildren.Add(T);
+            break;
+          end;
+        end;
     end;
 end;
 
@@ -347,7 +380,6 @@ end;
 
 destructor TInternalTiledMapLoader.Destroy;
 begin
-  FreeAndNil(FTiledMap);
   inherited;
 end;
 
@@ -359,7 +391,7 @@ begin
   InitNodeTree;
 end;
 
-function LoadTiled(URL: string): TX3DRootNode;
+function LoadTiled(URL: string; out ALoader: TObject): TX3DRootNode;
 var
   Loader: TInternalTiledMapLoader;
 begin
@@ -367,6 +399,7 @@ begin
   try
     Loader.LoadTMX(URL);
     Result := Loader.Root;
+    ALoader := Loader.TiledMap;
   finally
     FreeAndNil(Loader);
   end;
