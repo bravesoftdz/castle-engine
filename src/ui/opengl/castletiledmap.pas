@@ -1,5 +1,5 @@
 {
-  Copyright 2015, 2016 Tomasz Wojtyś, Michalis Kamburelis.
+  Copyright 2015-2017 Tomasz Wojtyś, Michalis Kamburelis, Trung Le.
 
   This file is part of "Castle Game Engine".
 
@@ -91,6 +91,9 @@ type
     X: Single;
     { The y coordinate of the object in pixels. }
     Y: Single;
+    { Center coorddinate of the object in pixels. }
+    CenterX,
+    CenterY: single;
     { The width of the object in pixels (defaults to 0). }
     Width: Single;
     { The height of the object in pixels (defaults to 0). }
@@ -770,6 +773,8 @@ begin
         end;
       end;
     finally FreeAndNil(I) end;
+    CenterX := X + Width / 2;
+    CenterY := Y + Height / 2;
   end;
 end;
 
