@@ -330,16 +330,16 @@ end;
 procedure TInternalTiledMapLoader.RebaseYAxis(const ALayer: PLayer);
 var
   i: integer;
-  TiledObj: TTiledObject;
+  TiledObj: ^TTiledObject;
 begin
   if ALayer^.LayerType = ltObjectGroup then
     for i := 0 to ALayer^.Objects.Count-1 do
     begin
-      TiledObj := ALayer^.Objects[i];
-      TiledObj.Y :=
-          FTiledMap.Height * FTiledMap.TileHeight - TiledObj.Y;
-      TiledObj.CenterY :=
-          FTiledMap.Height * FTiledMap.TileHeight - TiledObj.CenterY;
+      TiledObj := ALayer^.Objects.Ptr(i);
+      TiledObj^.Y :=
+          FTiledMap.Height * FTiledMap.TileHeight - TiledObj^.Y;
+      TiledObj^.CenterY :=
+          FTiledMap.Height * FTiledMap.TileHeight - TiledObj^.CenterY;
     end;
 end;
 
