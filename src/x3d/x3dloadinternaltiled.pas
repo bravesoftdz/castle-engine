@@ -86,6 +86,8 @@ type
         const AImageName, APartSignature: string): TShapeNode;
     { Construct an orthogonal map from given tiled map. }
     procedure ConstructOrthogonalMap(const AParentNode: TAbstractGroupingNode);
+    { Rebase object's Y-axis. }
+    procedure RebaseYAxis(const ALayer: PLayer);
   public
     constructor Create;
     destructor Destroy; override;
@@ -260,8 +262,12 @@ begin
     for i := 0 to FTiledMap.Layers.Count-1 do
     begin
       Layer_ := FTiledMap.Layers.Ptr(i);
-      if (Layer_^.LayerType = ltObjectGroup) or
-         (Layer_^.LayerType = ltImageLayer) then
+      if Layer_^.LayerType = ltObjectGroup then
+      begin
+        RebaseYAxis(Layer_);
+        continue;
+      end;
+      if Layer_^.LayerType = ltImageLayer then
         continue;
       if not Layer_^.Visible then
         continue;
@@ -314,6 +320,21 @@ begin
     FreeAndNil(ShapeNodeMap);
     FreeAndNil(ImageTexNodeMap);
   end;
+end;
+
+procedure TInternalTiledMapLoader.RebaseYAxis(const ALayer: PLayer);
+var
+  i, Len: integer;
+  TiledObj: TTiledObject;
+begin
+  Len := 0;
+  if ALayer^.LayerType = ltObjectGroup then
+    for i := 0 to ALayer^.Objects.Count-1 do
+    begin
+      TiledObj := ALayer^.Objects[i];
+      TiledObj.Y :=
+          FTiledMap.Height * FTiledMap.TileHeight - ALayer^.Objects[i].Y;
+    end;
 end;
 
 constructor TInternalTiledMapLoader.Create;
