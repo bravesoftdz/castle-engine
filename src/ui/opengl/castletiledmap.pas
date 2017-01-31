@@ -297,6 +297,8 @@ type
     FLayers: TLayers;
     procedure LoadTMXFile(AURL: string);
   public
+    { Path to data. }
+    property DataPath: string read FDataPath;
     property Layers: TLayers read FLayers;
     { Map orientation. Tiled supports "orthogonal", "isometric" and "staggered"
       (since 0.9) at the moment. }
