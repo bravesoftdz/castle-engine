@@ -362,7 +362,8 @@ begin
             T := TTransformNode.Create(TiledObj.Name);
             T.Translation := Vector3Single(
                 TiledObj.CenterX, TiledObj.CenterY, AZOrder);
-            T.FdChildren.Add(Load3D(TiledObj.Properties[j].Value));
+            T.FdChildren.Add(Load3D(
+                FTiledMap.DataPath + TiledObj.Properties[j].Value));
             FRoot.FdChildren.Add(T);
             break;
           end;
