@@ -345,30 +345,47 @@ end;
 
 procedure TInternalTiledMapLoader.LoadObjects(const ALayer: PLayer;
     const AZOrder: single);
+type
+  TRootNodeList = specialize TFPGMap<string, TX3DRootNode>;
 var
-  i, j: integer;
+  i, j, Tmp: integer;
   TiledObj: TTiledObject;
   T: TTransformNode;
+  R: TX3DRootNode;
+  RootNodeList: TRootNodeList;
+  s: string;
 begin
-  if ALayer^.LayerType = ltObjectGroup then
-    for i := 0 to ALayer^.Objects.Count-1 do
-    begin
-      TiledObj := ALayer^.Objects[i];
-      if TiledObj.Properties <> nil then
-        for j := 0 to TiledObj.Properties.Count-1 do
-        begin
-          if TiledObj.Properties[j].Name = 'url' then
+  RootNodeList := TRootNodeList.Create;
+  try
+    if ALayer^.LayerType = ltObjectGroup then
+      for i := 0 to ALayer^.Objects.Count-1 do
+      begin
+        TiledObj := ALayer^.Objects[i];
+        if TiledObj.Properties <> nil then
+          for j := 0 to TiledObj.Properties.Count-1 do
           begin
-            T := TTransformNode.Create(TiledObj.Name);
-            T.Translation := Vector3Single(
-                TiledObj.CenterX, TiledObj.CenterY, AZOrder);
-            T.FdChildren.Add(Load3D(
-                FTiledMap.DataPath + TiledObj.Properties[j].Value));
-            FRoot.FdChildren.Add(T);
-            break;
+            if TiledObj.Properties[j].Name = 'url' then
+            begin
+              T := TTransformNode.Create(TiledObj.Name);
+              T.Translation := Vector3Single(
+                  TiledObj.CenterX, TiledObj.CenterY, AZOrder);
+              s := FTiledMap.DataPath + TiledObj.Properties[j].Value;
+              if RootNodeList.Find(s, Tmp) then
+                R := RootNodeList.Data[Tmp]
+              else
+              begin
+                R := Load3D(s);
+                RootNodeList.Add(s, R);;
+              end;
+              T.FdChildren.Add(R);
+              FRoot.FdChildren.Add(T);
+              break;
+            end;
           end;
-        end;
-    end;
+      end;
+  finally
+    FreeAndNil(RootNodeList);
+  end;
 end;
 
 constructor TInternalTiledMapLoader.Create;
