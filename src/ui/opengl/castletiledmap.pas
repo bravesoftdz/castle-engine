@@ -1,4 +1,4 @@
-{
+﻿{
   Copyright 2015-2017 Tomasz Wojtyś, Michalis Kamburelis, Trung Le.
 
   This file is part of "Castle Game Engine".

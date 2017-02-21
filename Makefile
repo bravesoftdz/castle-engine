@@ -30,7 +30,7 @@
 #     Same as clean, but also delete:
 #     - Emacs backup files (*~) and
 #     - Delphi backup files (*.~???)
-#     - pasdoc generated documentation in doc/pasdoc/
+#     - pasdoc generated documentation in doc/pasdoc/ and doc/reference/
 #     - closed-source libs you may have left in tools/build-tool/data
 #     This is a useful step when packing the release of CGE.
 #
@@ -48,8 +48,8 @@ FIND:=find
 .PHONY: all
 all:
 	$(MAKE) --no-print-directory build-using-fpmake
-	tools/texturefont2pascal/texturefont2pascal_compile.sh
-	tools/image2pascal/image2pascal_compile.sh
+	tools/texture-font-to-pascal/texture-font-to-pascal_compile.sh
+	tools/image-to-pascal/image-to-pascal_compile.sh
 	tools/castle-curves/castle-curves_compile.sh
 	tools/build-tool/castle-engine_compile.sh
 	tools/sprite-sheet-to-x3d/sprite-sheet-to-x3d_compile.sh
@@ -90,8 +90,8 @@ DATADIR=$(DATAROOTDIR)
 
 .PHONY: install
 install:
-	install tools/texturefont2pascal/texturefont2pascal $(BINDIR)
-	install tools/image2pascal/image2pascal $(BINDIR)
+	install tools/texture-font-to-pascal/texture-font-to-pascal $(BINDIR)
+	install tools/image-to-pascal/image-to-pascal $(BINDIR)
 	install tools/castle-curves/castle-curves $(BINDIR)
 	install tools/build-tool/castle-engine $(BINDIR)
 	install tools/sprite-sheet-to-x3d/sprite-sheet-to-x3d $(BINDIR)
@@ -101,8 +101,8 @@ install:
 
 .PHONY: uninstall
 uninstall:
-	rm -f  $(BINDIR)/texturefont2pascal \
-	       $(BINDIR)/image2pascal \
+	rm -f  $(BINDIR)/texture-font-to-pascal \
+	       $(BINDIR)/image-to-pascal \
 	       $(BINDIR)/castle-curves \
 	       $(BINDIR)/castle-engine \
 	       $(BINDIR)/sprite-sheet-to-x3d
@@ -158,6 +158,7 @@ EXAMPLES_BASE_NAMES := \
   examples/curves_surfaces/bezier_surfaces/animate_surface \
   examples/curves_surfaces/bezier_surfaces/design_surface \
   examples/curves_surfaces/interpolated_curves \
+  examples/curves_surfaces/simplest_curve_read \
   examples/space_filling_curve/draw_space_filling_curve \
   examples/research_special_rendering_methods/radiance_transfer/radiance_transfer \
   examples/research_special_rendering_methods/radiance_transfer/precompute_radiance_transfer \
@@ -200,8 +201,8 @@ EXAMPLES_BASE_NAMES := \
   examples/2d_standard_ui/zombie_fighter/zombie_fighter \
   examples/android/android_demo/androiddemo_standalone \
   tools/build-tool/castle-engine \
-  tools/image2pascal/image2pascal \
-  tools/texturefont2pascal/texturefont2pascal \
+  tools/image-to-pascal/image-to-pascal \
+  tools/texture-font-to-pascal/texture-font-to-pascal \
   tools/castle-curves/castle-curves \
   tools/sprite-sheet-to-x3d/sprite-sheet-to-x3d \
   examples/random_generator/random_speed_test \

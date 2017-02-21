@@ -1,5 +1,5 @@
 {
-  Copyright 2002-2016 Michalis Kamburelis.
+  Copyright 2002-2017 Michalis Kamburelis.
 
   This file is part of "Castle Game Engine".
 
@@ -928,11 +928,12 @@
     property PrototypeInstanceHelpers: TX3DNode read FPrototypeInstanceHelpers;
     { @groupEnd }
 
-    { Should we use this node when URN is required by EXTERNPROTO ?
+    { Does this node matches the given URN. This is used when searching for an built-in
+      implementation of a node declared in X3D using the EXTERNPROTO.
 
       Implementors note: in this class, this returns @false.
-      You can use constants like URNVRML97Nodes and URNKambiNodes to help
-      implementing this. }
+      You can use constants like @link(URNVRML97Nodes) and functions like
+      @link(URNMatchingCastle) to implement this easily. }
     class function URNMatching(const URN: string): boolean; virtual;
 
     { Default value of "containerField" attribute for this node in X3D XML
@@ -992,7 +993,7 @@
       (including TCastleScene). But if more than one scene is used,
       then all the scenes must be static (TCastleSceneCore.ProcessEvents = false
       and TCastleSceneCore.Static = true). Static scenes are ones
-      that never change, that is never have any TCastleSceneCore.ChangedField called.
+      that never change, that is never have any TCastleSceneCore.InternalChangedField called.
       This means that events processing is disabled, and also
       other dynamic scene changes from code are disallowed.
 
