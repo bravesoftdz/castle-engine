@@ -94,11 +94,7 @@ const
     for TFileFilterList.AddFiltersFromString and TCastleWindowCustom.FileDialog. }
   Load3D_FileFilters =
   'All Files|*|' +
-<<<<<<< HEAD
-  '*All 3D models|*.wrl;*.wrl.gz;*.wrz;*.x3d;*.x3dz;*.x3d.gz;*.x3dv;*.x3dvz;*.x3dv.gz;*.kanim;*.castle-anim-frames;*.dae;*.iv;*.3ds;*.md3;*.obj;*.geo;*.json;*.tmx|' +
-=======
-  '*All 3D models|*.wrl;*.wrl.gz;*.wrz;*.x3d;*.x3dz;*.x3d.gz;*.x3dv;*.x3dvz;*.x3dv.gz;*.kanim;*.castle-anim-frames;*.dae;*.iv;*.3ds;*.md3;*.obj;*.geo;*.json;*.stl|' +
->>>>>>> fe9310768899a0e7cff281064858477bfc4cd9e3
+  '*All 3D models|*.wrl;*.wrl.gz;*.wrz;*.x3d;*.x3dz;*.x3d.gz;*.x3dv;*.x3dvz;*.x3dv.gz;*.kanim;*.castle-anim-frames;*.dae;*.iv;*.3ds;*.md3;*.obj;*.geo;*.json;*.tmx;*.stl|' +
   'VRML (*.wrl, *.wrl.gz, *.wrz)|*.wrl;*.wrl.gz;*.wrz|' +
   { TODO:
     and X3D binary (*.x3db;*.x3db.gz)
@@ -112,13 +108,8 @@ const
   'Quake 3 engine models (*.md3)|*.md3|' +
   'Wavefront (*.obj)|*.obj|' +
   'Videoscape (*.geo)|*.geo|' +
-<<<<<<< HEAD
   'Spine animation (*.json)|*.json' +
-  'Tiled (*.tmx)|*.tmx';
-=======
-  'Spine animation (*.json)|*.json|' +
   'Standard Triangle Language (*.stl)|*.stl';
->>>>>>> fe9310768899a0e7cff281064858477bfc4cd9e3
 
 { Load various model formats as animation expressed by VRML/X3D sequence.
 
@@ -164,11 +155,8 @@ implementation
 
 uses CastleClassUtils, CastleURIUtils,
   X3DLoadInternalGEO, X3DLoadInternal3DS, X3DLoadInternalOBJ,
-<<<<<<< HEAD
   X3DLoadInternalCollada, X3DLoadInternalSpine, X3DLoadInternalTiled,
-=======
-  X3DLoadInternalCollada, X3DLoadInternalSpine, X3DLoadInternalSTL,
->>>>>>> fe9310768899a0e7cff281064858477bfc4cd9e3
+  X3DLoadInternalSTL,
   CastleInternalNodeInterpolator;
 
 function Load3D(const URL: string;

@@ -633,17 +633,13 @@ function URIMimeType(const URI: string; out Gzipped: boolean): string;
     if Ext = '.geo' then Result := 'application/x-geo' else
     if Ext = '.kanim' then Result := 'application/x-castle-anim-frames' else
     if Ext = '.castle-anim-frames' then Result := 'application/x-castle-anim-frames' else
-<<<<<<< HEAD
-    if Ext = '.json' then Result := 'application/json' else                                 
-    if Ext = '.tmx' then Result := 'application/tiled' else
-=======
     if Ext = '.json' then Result := 'application/json' else
     { Various sites propose various MIME types for STL:
       https://gist.github.com/allysonsouza/1bf9d4a0295a14373979cd23d15df0a9
       application/wavefront-stl
       application/vnd.ms-pki.stl }
     if Ext = '.stl' then Result := 'application/x-stl' else
->>>>>>> fe9310768899a0e7cff281064858477bfc4cd9e3
+    if Ext = '.tmx' then Result := 'application/tiled' else
     // Images.
     { Only images that we cannot handle in CastleImages unit are listed below.
       For handled images, their extensions are mime types are recorded
