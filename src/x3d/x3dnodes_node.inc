@@ -1873,17 +1873,17 @@ var
          (Attr.Name = SAttrDEF) then
         Continue;
 
-      Index := IndexOfField(Attr.Name);
+      Index := IndexOfField(Attr.NodeName8);
       if Index >= 0 then
       begin
-        Fields[Index].ParseXMLAttribute(Attr.Value, Reader);
+        Fields[Index].ParseXMLAttribute(Attr.NodeValue8, Reader);
         { Note that saving PositionInParent from XML attributes order
           isn't really useful, as FPC DOM unit already sorted
           Element.Attributes (TDOMNamedNodeMap) by name. }
         Fields[Index].PositionInParent := Position;
         Inc(Position);
       end else
-        WritelnWarning('VRML/X3D', 'Unknown X3D field name (unhandled X3D XML attribute) "' + Attr.Name + '" in node "' + X3DType + '"');
+        WritelnWarning('VRML/X3D', 'Unknown X3D field name (unhandled X3D XML attribute) "' + Attr.NodeName8 + '" in node "' + X3DType + '"');
     end;
   end;
 
@@ -1980,7 +1980,7 @@ var
                 and is different than current ContainerField. }
               FieldIndex := IndexOfField(Child.DefaultContainerField);
               if FieldIndex >= 0 then
-                WritelnWarning('VRML/X3D', 'X3D XML: containerField indicated unknown field name ("' + ContainerField + '" by node "' + Child.X3DType + '" inside node "' + X3DType + '"), using the default containerField value "' + Child.DefaultContainerField + '" succeded');
+                WritelnWarning('VRML/X3D', 'X3D XML: containerField indicated unknown field name ("' + ContainerField + '" by node "' + Child.X3DType + '" inside node "' + X3DType + '"), using the default containerField value "' + Child.DefaultContainerField + '" succeeded');
             end;
 
             if FieldIndex >= 0 then

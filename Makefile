@@ -90,14 +90,16 @@ DATADIR=$(DATAROOTDIR)
 
 .PHONY: install
 install:
+	install -d $(BINDIR)
 	install tools/texture-font-to-pascal/texture-font-to-pascal $(BINDIR)
 	install tools/image-to-pascal/image-to-pascal $(BINDIR)
 	install tools/castle-curves/castle-curves $(BINDIR)
 	install tools/build-tool/castle-engine $(BINDIR)
 	install tools/sprite-sheet-to-x3d/sprite-sheet-to-x3d $(BINDIR)
 #	cp -R tools/build-tool/data $(DATADIR)/castle-engine
+	install -d  $(DATADIR)
 	cd tools/build-tool/data/ && \
-	  $(FIND) . -type f -exec install -D '{}' $(DATADIR)/castle-engine/'{}' ';'
+	  $(FIND) . -type f -exec install --mode 644 -D '{}' $(DATADIR)/castle-engine/'{}' ';'
 
 .PHONY: uninstall
 uninstall:
@@ -108,14 +110,23 @@ uninstall:
 	       $(BINDIR)/sprite-sheet-to-x3d
 	rm -Rf $(DATADIR)/castle-engine
 
-# Strip libraries that cannot be distributed in Debian package of CGE for now,
-# because they (possibly) cannot be recompiled by Debian software right now
-# (or maybe they can, but noone had time to try it yet, and wrap in a script).
-# This concerns some Windows and Android libs.
+# Strip libraries that cannot be distributed in Debian package of CGE.
+# - Some of them (some bundled Windows, Android libs) cannot be recompiled
+#   automatically and easily for now (although they are open-source),
+#   and are not of sufficient interest to the Debian users.
+# - Some (Gradle) should be better used by depending on
+#   the appropriate Debian package.
 .PHONY: strip-precompiled-libraries
 strip-precompiled-libraries:
 	rm -Rf tools/build-tool/data/external_libraries/ \
-	       tools/build-tool/data/android/integrated-components/sound/
+	       tools/build-tool/data/android/integrated-components/sound/ \
+	       tools/build-tool/data/android/integrated-components/ogg_vorbis/ \
+	       tools/build-tool/data/android/base/gradle/ \
+	       tools/build-tool/data/android/base/gradlew \
+	       tools/build-tool/data/android/base/gradlew.bat \
+	       tools/build-tool/data/android/integrated/gradle/ \
+	       tools/build-tool/data/android/integrated/gradlew \
+	       tools/build-tool/data/android/integrated/gradlew.bat
 
 # examples and tools -----------------------------------------------------------
 
@@ -149,6 +160,7 @@ EXAMPLES_BASE_NAMES := \
   examples/joystick/joystick_demo \
   examples/fonts/test_font_break \
   examples/fonts/font_from_texture \
+  examples/fonts/test_local_characters/test_local_characters \
   examples/fonts/html_text \
   examples/tiled/tiled_demo_standalone \
   examples/window/window_events \
@@ -283,6 +295,7 @@ clean: cleanexamples
 	  examples/portable_game_skeleton/my_fantastic_game \
 	  examples/portable_game_skeleton/my_fantastic_game.exe \
 	  examples/fonts/font_draw_over_image_output.png
+	$(MAKE) -C doc/man/man1/ clean
 # fpmake binary, and units/ produced by fpmake compilation
 	rm -Rf fpmake fpmake.exe units/ *.fpm
 # lazarus produces lib/ subdirectories during compilation
@@ -297,16 +310,10 @@ cleanmore: clean
 			   -iname '*.blend1' \
 			')' -exec rm -f '{}' ';'
 	$(MAKE) -C doc/pasdoc/ clean
-	rm -Rf tools/build-tool/data/android/integrated-components/google_play_services/google-play-services_lib/ \
-	       tools/build-tool/data/android/integrated-components/google_play_services/libs/*.jar \
-	       tools/build-tool/data/android/integrated-components/giftiz/GiftizSDKLibrary/ \
-	       tools/build-tool/data/android/integrated-components/chartboost/libs/*.jar \
-	       tools/build-tool/data/android/integrated-components/heyzap/AudienceNetwork/ \
-	       tools/build-tool/data/android/integrated-components/heyzap/unity-ads/ \
-	       tools/build-tool/data/android/integrated-components/heyzap/libs/*.jar \
-	       tools/build-tool/data/android/integrated-components/startapp/libs/*.jar \
-	       tools/build-tool/data/android/integrated-components/game_analytics/libs/*.jar \
-	       tools/build-tool/data/android/integrated-components/game_analytics/jni/*/*.so
+	rm -Rf tools/build-tool/data/android/integrated-components/giftiz/app/libs/*.jar \
+	       tools/build-tool/data/android/integrated-components/chartboost/app/libs/*.jar \
+	       tools/build-tool/data/android/integrated-components/heyzap/app/libs/*.jar \
+	       tools/build-tool/data/android/integrated-components/startapp/app/libs/*.jar
 
 cleanall: cleanmore
 

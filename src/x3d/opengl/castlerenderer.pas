@@ -204,7 +204,8 @@ interface
 uses Classes, SysUtils, FGL, CastleGL,
   CastleUtils, CastleVectors, X3DFields, X3DNodes,
   CastleInternalX3DLexer, CastleImages, CastleGLUtils, CastleRendererInternalLights,
-  CastleGLShaders, CastleGLImages, CastleVideos, X3DTime, CastleShapes,
+  CastleGLShaders, CastleGLImages, CastleTextureImages,
+  CastleVideos, X3DTime, CastleShapes,
   CastleGLCubeMaps, CastleClassUtils, CastleCompositeImage, Castle3D,
   CastleGeometryArrays, CastleArraysGenerator, CastleRendererInternalShader,
   X3DShadowMaps, CastleRendererInternalTextureEnv;
@@ -1106,8 +1107,6 @@ type
       and will be automatically freed during UnprepareAll call. }
     procedure PrepareScreenEffect(Node: TScreenEffectNode);
   end;
-
-  EGLRendererror = class(EX3DError);
 
 const
   AllVboTypes = [Low(TVboType) .. High(TVboType)];

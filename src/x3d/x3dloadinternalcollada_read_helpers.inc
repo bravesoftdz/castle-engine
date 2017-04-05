@@ -32,7 +32,8 @@ var
 begin
   Child := Element.ChildElement(ChildTagName, false);
   if Child <> nil then
-    Result := Child.TextData else
+    Result := Child.TextData
+  else
     Result := '';
 end;
 

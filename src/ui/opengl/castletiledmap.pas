@@ -31,7 +31,7 @@ type
     Value: string;
     { The type of the property. Can be string (default), int, float, bool, color
       or file (since 0.16, with color and file added in 0.17). }
-    _type: string;
+    AType: string;
   end;
 
   { List of properties. }
@@ -468,11 +468,11 @@ begin
     try
       while I.GetNext do
       begin
-        WritelnLog('LoadTileset element', I.Current.TagName);
+        WritelnLog('LoadTileset element', I.Current.TagName8);
         case LowerCase(I.Current.TagName) of
           'tileoffset': begin
-            TileOffset[0] := StrToInt(I.Current.GetAttribute('x'));
-            TileOffset[1] := StrToInt(I.Current.GetAttribute('y'));
+            TileOffset[0] := I.Current.AttributeIntegerDef('x', 0);
+            TileOffset[1] := I.Current.AttributeIntegerDef('y', 0);
           end;
           'properties': LoadProperties(I.Current, Properties);
           'image': LoadImage(I.Current, Image);
@@ -509,12 +509,12 @@ end;
 procedure TTiledMap.LoadProperty(Element: TDOMElement;
   var AProperty: TProperty);
 begin
-  AProperty.Name := Element.GetAttribute('name');
-  AProperty.Value := Element.GetAttribute('value');
-  AProperty._type := Element.GetAttribute('type');
+  AProperty.Name := Element.AttributeStringDef('name', '');
+  AProperty.Value := Element.AttributeStringDef('value', '');
+  AProperty.AType := Element.AttributeStringDef('type', '');
   WritelnLog('LoadProperty name', AProperty.Name);
   WritelnLog('LoadProperty value', AProperty.Value);
-  WritelnLog('LoadProperty type', AProperty._type);
+  WritelnLog('LoadProperty type', AProperty.AType);
 end;
 
 procedure TTiledMap.LoadProperties(Element: TDOMElement;
@@ -527,7 +527,7 @@ begin
   try
     while I.GetNext do
     begin
-      WritelnLog('LoadProperties element', I.Current.TagName);
+      WritelnLog('LoadProperties element', I.Current.TagName8);
       case LowerCase(I.Current.TagName) of
         'property':
         begin
@@ -574,7 +574,7 @@ begin
     try
       while I.GetNext do
       begin
-        WritelnLog('LoadImage element', I.Current.TagName);
+        WritelnLog('LoadImage element', I.Current.TagName8);
         case LowerCase(I.Current.TagName) of
           'data': LoadData(I.Current, Data);
         end;
@@ -598,7 +598,7 @@ begin
     OffsetX := 0;
     OffsetY := 0;
     LayerType := ltLayer;
-    Name := Element.GetAttribute('name');
+    Name := Element.AttributeStringDef('name', '');
     if Element.AttributeString('opacity', TmpStr) then
       Opacity := StrToFloat(TmpStr);
     if Element.GetAttribute('visible') = '0' then
@@ -617,7 +617,7 @@ begin
     try
       while I.GetNext do
       begin
-        WritelnLog('LoadLayer element', I.Current.TagName);
+        WritelnLog('LoadLayer element', I.Current.TagName8);
         case LowerCase(I.Current.TagName) of
           'properties': LoadProperties(I.Current, Properties);
           'data': LoadData(I.Current, Data);
@@ -646,7 +646,7 @@ begin
     OffsetY := 0;
     DrawOrder := odoTopDown;
     LayerType := ltObjectGroup;
-    Name := Element.GetAttribute('name');
+    Name := Element.AttributeStringDef('name', '');
     if Element.AttributeString('opacity', TmpStr) then
       Opacity := StrToFloat(TmpStr);
     if Element.GetAttribute('visible') = '0' then
@@ -671,7 +671,7 @@ begin
   try
     while I.GetNext do
     begin
-      WritelnLog('LoadObjectGroup element', I.Current.TagName);
+      WritelnLog('LoadObjectGroup element', I.Current.TagName8);
       case LowerCase(I.Current.TagName) of
         'properties': LoadProperties(I.Current, NewLayer.Properties);
         'object': begin
@@ -759,17 +759,17 @@ begin
     try
       while I.GetNext do
       begin
-        WritelnLog('LoadTiledObject element', I.Current.TagName);
+        WritelnLog('LoadTiledObject element', I.Current.TagName8);
         case LowerCase(I.Current.TagName) of
           'properties': LoadProperties(I.Current, Properties);
           'ellipse': Primitive := topEllipse;
           'polygon': begin
             Primitive := topPoligon;
-            ReadPoints(I.Current.GetAttribute('points'), Points);
+            ReadPoints(I.Current.AttributeStringDef('points', ''), Points);
           end;
           'polyline': begin
             Primitive := topPolyLine;
-            ReadPoints(I.Current.GetAttribute('points'), Points);
+            ReadPoints(I.Current.AttributeStringDef('points', ''), Points);
           end;
           'image': LoadImage(I.Current, Image);
         end;
@@ -795,7 +795,7 @@ begin
     OffsetX := 0;
     OffsetY := 0;
     LayerType := ltImageLayer;
-    Name := Element.GetAttribute('name');
+    Name := Element.AttributeStringDef('name', '');
     if Element.AttributeString('opacity', TmpStr) then
       Opacity := StrToFloat(TmpStr);
     if Element.GetAttribute('visible') = '0' then
@@ -820,7 +820,7 @@ begin
     try
       while I.GetNext do
       begin
-        WritelnLog('LoadImageLayer element', I.Current.TagName);
+        WritelnLog('LoadImageLayer element', I.Current.TagName8);
         case LowerCase(I.Current.TagName) of
           'properties': LoadProperties(I.Current, NewLayer.Properties);
           'image': LoadImage(I.Current, Image);
@@ -870,7 +870,7 @@ begin
       begin
         UsePlainXML := True;
       end else begin
-        RawData := Element.TextContent;
+        RawData := Element.TextData;
         WritelnLog('LoadData RawData', RawData);
         case Encoding of
           etBase64: begin
@@ -937,12 +937,12 @@ begin
       try
         while I.GetNext do
         begin
-          WritelnLog('LoadData element', I.Current.TagName);
+          WritelnLog('LoadData element', I.Current.TagName8);
           case LowerCase(I.Current.TagName) of
             'tile': if UsePlainXML then
             begin
               SetLength(Data, Length(Data)+1);
-              Data[High(Data)] := StrToInt(I.Current.GetAttribute('gid'));
+              Data[High(Data)] := I.Current.AttributeCardinalDef('gid', 0);
             end;
           end;
         end;
@@ -984,7 +984,7 @@ begin
     try
       while I.GetNext do
       begin
-        WritelnLog('LoadTile element', I.Current.TagName);
+        WritelnLog('LoadTile element', I.Current.TagName8);
         case LowerCase(I.Current.TagName) of
           'properties': LoadProperties(I.Current, Properties);
           'image': LoadImage(I.Current, Image);
@@ -1016,7 +1016,7 @@ begin
   try
     while I.GetNext do
     begin
-      WritelnLog('LoadAnimation element', I.Current.TagName);
+      WritelnLog('LoadAnimation element', I.Current.TagName8);
       case LowerCase(I.Current.TagName) of
         'frame': begin
           if not Assigned(AAnimation) then
@@ -1079,7 +1079,7 @@ begin
     try
       while I.GetNext do
       begin
-        WritelnLog('LoadTMXFile element', I.Current.TagName);
+        WritelnLog('LoadTMXFile element', I.Current.TagName8);
         case LowerCase(I.Current.TagName) of
           'tileset': LoadTileset(I.Current);
           'layer': LoadLayer(I.Current);

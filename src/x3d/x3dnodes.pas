@@ -1349,8 +1349,16 @@ type
 
 { TX3DPrototype ------------------------------------------------------------- }
 
-  { }
-  EX3DPrototypeInstantiateError = class(Exception);
+  { Raised when there's a problem instantiating X3D prototype,
+    see @link(TX3DPrototypeNode.Instantiate).
+
+    User code usually doesn't see this exception, unless you call
+    @link(TX3DPrototypeNode.Instantiate) explicitly (but you usually don't).
+    In normal circumstances, the engine calls @link(TX3DPrototypeNode.Instantiate)
+    when necessary, and converts eventual EX3DPrototypeInstantiateError
+    exceptions into warnings (reported by
+    @link(TCastleApplicationProperties.OnWarning ApplicationProperties.OnWarning)). }
+  EX3DPrototypeInstantiateError = class(EX3DError);
 
   { Node with information about a VRML/X3D prototype.
 
@@ -1492,9 +1500,10 @@ type
           to correctly save using PrototypeInstanceSourceNode, instead
           of writing actual node contents.))
 
-      @raises(EX3DPrototypeInstantiateError if for some reason
+      @raises(EX3DPrototypeInstantiateError If for some reason
         the prototype cannot be instantiated.
-        Outside code should catch this and replace with ApplicationProperties.OnWarning, if possible.)
+        Outside code should catch this and replace with
+        ApplicationProperties.OnWarning, if possible.)
     }
     function Instantiate: TX3DNode;
   end;
@@ -1675,7 +1684,7 @@ type
       do when parsed VRML route. It looks for given node name
       (in Names.Nodes, then Names.Imported),
       then it looks for field/event within this node,
-      and if everything is successfull --- sets route properties.
+      and if everything is successful --- sets route properties.
 
       If something goes wrong, WritelnWarning is generated
       and route ending is left unset.
